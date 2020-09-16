@@ -8,4 +8,6 @@ public interface UserService extends AppService<User, String> {
 
     Page<User> getPaginated(Pageable pageable);
 
+    String create(User user);
+
 }

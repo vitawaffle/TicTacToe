@@ -1,5 +1,6 @@
 package by.vit.tictactoe.service;
 
+import by.vit.tictactoe.entity.Role;
 import by.vit.tictactoe.entity.User;
 import by.vit.tictactoe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,13 +41,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String save(final User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user).getId();
     }
 
     @Override
     public void deleteById(final String id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public String create(final User user) {
+        final Role role = new Role();
+        role.setName("USER");
+
+        user.setId(null);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(new ArrayList<>(Collections.singletonList(role)));
+        user.setScore(0);
+
+        return save(user);
     }
 
 }

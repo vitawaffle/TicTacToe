@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -86,6 +88,26 @@ public class UserServiceTests {
     @Test
     public void deleteById_NotExistingId_ShouldDoesNotThrow() {
         assertDoesNotThrow(() -> userService.deleteById(""));
+    }
+
+    @Test
+    public void create_ShouldDoesNotThrow() {
+        final User user = new User();
+        user.setUsername("User2");
+        user.setPassword("password");
+
+        assertDoesNotThrow(() -> userService.create(user));
+    }
+
+    @Test
+    public void create_ShouldCreate() {
+        final User user = new User();
+        user.setUsername("User2");
+        user.setPassword("password");
+
+        final String id = userService.create(user);
+
+        assertTrue(userRepository.findById(id).isPresent());
     }
 
 }
